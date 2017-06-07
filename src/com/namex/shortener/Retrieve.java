@@ -15,27 +15,27 @@ public class Retrieve extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
  
-    String urlId = request.getServletPath();
- 
-    String longUrl = null;
-    if (urlId != null && !"".equals(urlId)) {
-        try {
-        longUrl = new Logic().getLongUrl(urlId);
-        } catch (Exception e) {
-        // handling exception here
-        e.printStackTrace();
-        }
-    }
- 
-    if (longUrl == null) {
-        // if long url not found, send to index.jsp
-        System.out.println("long url not found, back to index.jsp");
-        response.sendRedirect("index.jsp");
-    } else {
-        //if long url found, so redirect the browser
-        System.out.println("redirecting to "+longUrl );
-        response.sendRedirect(longUrl);
-    }
+	    String urlId = request.getServletPath();
+	 
+	    String longUrl = null;
+	    if (urlId != null && !"".equals(urlId)) {
+	        try {
+	        longUrl = new Logic().getLongUrl(urlId);
+	        } catch (Exception e) {
+	        // handling exception here
+	        e.printStackTrace();
+	        }
+	    }
+	 
+	    if (longUrl == null) {
+	        // if long url not found, send to index.jsp
+	        System.out.println("long url not found, back to index.jsp");
+	        response.sendRedirect("index.jsp");
+	    } else {
+	        //if long url found, so redirect the browser
+	        System.out.println("redirecting to "+longUrl );
+	        response.sendRedirect(longUrl);
+	    }
     }
  
 }

@@ -1,11 +1,14 @@
 package com.namex.shortener;
  
 import java.io.IOException;
- 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
  
 public class Insert extends HttpServlet {
  
@@ -30,26 +33,33 @@ public class Insert extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
  
-    String longUrl = request.getParameter("longUrl");
-    request.getSession().setAttribute("a", "a");
-    String a = response.encodeURL(request.getRequestURI());
-    request.getSession().setAttribute("a", "a");
-    System.out.println("->"+request.getRequestURI());
-    System.out.println(a);
-    System.out.println("shortening " + longUrl);
-    String serverName = request.getServerName();
-    int port = request.getServerPort();
-    String contextPath = request.getContextPath();
-    String shortUrl = null;
-    try {
-        shortUrl = new Logic().getShort(serverName, port, contextPath,
-            longUrl);
-    } catch (Exception e) {
- 
-        e.printStackTrace();
-    }
-    System.out.println("short url: " + shortUrl);
-    request.getSession().setAttribute("shortUrl", shortUrl);
-    response.sendRedirect("index.jsp");
+    	Map<String, String> parameters = new HashMap<String, String>();
+    	
+    	parameters.put("longUrl" , request.getParameter("longUrl"));
+    	parameters.put("maxView" , request.getParameter("maxView"));
+    	parameters.put("dateStart" , request.getParameter("dateStart"));
+    	parameters.put("dateEnd" , request.getParameter("dateEnd"));
+    	parameters.put("password" , request.getParameter("password"));
+    	
+	    request.getSession().setAttribute("a", "a");
+	    String a = response.encodeURL(request.getRequestURI());
+	    request.getSession().setAttribute("a", "a");
+	    System.out.println("->"+request.getRequestURI());
+	    System.out.println(a);
+	    System.out.println("shortening " + parameters.get("longUrl"));
+	    String serverName = request.getServerName();
+	    int port = request.getServerPort();
+	    String contextPath = request.getContextPath();
+	    String shortUrl = null;
+
+	    try {
+	        shortUrl = new Logic().getShort(serverName, port, contextPath, parameters);
+	    } catch (Exception e) {
+	 
+	        e.printStackTrace();
+	    }
+	    System.out.println("short url: " + shortUrl);
+	    request.getSession().setAttribute("shortUrl", shortUrl);
+	    response.sendRedirect("index.jsp");
     }
 }

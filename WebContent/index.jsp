@@ -8,8 +8,13 @@
 </head>
 <body>
     <form action="insert" method="GET">
-        Long URL: <input type="text" name="longUrl" size="100" /> <input
-            type="submit" value="Get Short !" />
+        Long URL: <input type="text" name="longUrl" size="100" /><br> 
+        Max view: <input type="text" name="maxView" size="100" /> <br> 
+        Password: <input type="password" name="password" size="100" /><br> 
+        Date start (format dd/mm/yyyy): <input type="text" name="dateStart" size="100" /> <br> 
+        Date end (format dd/mm/yyyy): <input type="text" name="dateEnd" size="100" /> 
+        
+        <input type="submit" value="Get Short !" />
  
     </form>
     </p>
