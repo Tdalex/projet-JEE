@@ -15,7 +15,18 @@
         <servlet-name>Insert</servlet-name>
         <url-pattern>/insert</url-pattern>
     </servlet-mapping>
+ 	
+ 	<servlet>
+        <servlet-name>CheckPassword</servlet-name>
+        <servlet-class>com.namex.shortener.CheckPassword</servlet-class>
+        <load-on-startup>-1</load-on-startup>
+    </servlet>
  
+    <servlet-mapping>
+        <servlet-name>CheckPassword</servlet-name>
+        <url-pattern>/checkPassword</url-pattern>
+    </servlet-mapping>
+    
     <servlet>
         <servlet-name>Retrieve</servlet-name>
         <servlet-class>com.namex.shortener.Retrieve</servlet-class>

@@ -5,11 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Date;
-import java.util.HashMap;
  
 public class Logic {
     public Connection getConnection() throws IllegalAccessException, ClassNotFoundException, SQLException {
@@ -269,4 +267,39 @@ public class Logic {
 	    return false;
     }
     
+    public boolean checkPassword(String password, String urlId) throws Exception {
+	    if (urlId.startsWith("/")) {
+	        urlId = urlId.replace("/", "");
+	    }
+	    String query = "SELECT * FROM url_data where id=" + urlId;
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+
+	    try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+	        
+	        if (rs.next()) {
+	        	if(rs.getString("password") != null && !rs.getString("password").isEmpty()){
+	        		if(password.compareTo(rs.getString("password")) != 0){
+	        			return false;
+	        		}
+	        	}
+	        }
+	    } finally {
+	 
+	        if (rs != null) {
+	        	rs.close();
+	        }
+	        if (st != null) {
+	        	st.close();
+	        }
+	        if (conn != null) {
+	        	conn.close();
+	        }
+	    } 
+	    return true;
+    }
 }
