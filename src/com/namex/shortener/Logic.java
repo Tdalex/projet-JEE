@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
  
 public class Logic {
     public Connection getConnection() throws IllegalAccessException, ClassNotFoundException, SQLException {
@@ -59,12 +62,27 @@ public class Logic {
 	    if (id != null) {
 	        // if id is not null, this link has been shorten already.
 	        // nothing to do
-	 
 	    } else {
 	        // at this point id is null, make it shorter
+	    	int maxView = 0;
+	    	try {
+    		   maxView = Integer.parseInt(parameters.get("maxView"));
+    		} catch(Exception e){
+    		}
+	    	String start = "null";
+	    	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
+	    		start = "'"+parameters.get("dateStart")+"'";
+	    	}
+	    	
+	    	String end = "null";
+	    	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
+	    		end = "'"+parameters.get("dateEnd")+"'";
+	    	}
+	    	
 	        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views) VALUES('"
-	            + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"','"+parameters.get("start_date")+"','"+parameters.get("end_date")+"','"+parameters.get("max_views")+"')";
-	       
+	        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+")";
+
+	        System.out.println(sqlInsert);
 	        try {
 		        conn = getConnection();
 		        st = conn.createStatement();
@@ -80,8 +98,7 @@ public class Logic {
 	        // after we insert the record, we obtain the ID as identifier of our
 	        // new short link
 	        id = getId(parameters.get("longUrl"));
-	 
-	    }
+	    }  
 	   return "http://" + serverName + ":" + port + contextPath + "/" + id;
     }
  
@@ -89,7 +106,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT long_url FROM url_data where id=" + urlId;
+	    String query = "SELECT * FROM url_data where id=" + urlId;
 	    String longUrl = null;
 	    Connection conn = null;
 	    ResultSet rs = null;
@@ -100,18 +117,18 @@ public class Logic {
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
 	        if (rs.next()) {
-	        longUrl = rs.getString("long_url");
+	        	longUrl = rs.getString("long_url");
 	        }
 	    } finally {
 	 
 	        if (rs != null) {
-	        rs.close();
+	        	rs.close();
 	        }
 	        if (st != null) {
-	        st.close();
+	        	st.close();
 	        }
 	        if (conn != null) {
-	        conn.close();
+	        	conn.close();
 	        }
 	    }
 	 

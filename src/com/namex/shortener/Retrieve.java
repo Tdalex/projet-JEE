@@ -34,7 +34,7 @@ public class Retrieve extends HttpServlet {
 	    } else {
 	        //if long url found, so redirect the browser
 	        System.out.println("redirecting to "+longUrl );
-	        response.sendRedirect(longUrl);
+	        //response.sendRedirect(longUrl);
 	    }
     }
  
