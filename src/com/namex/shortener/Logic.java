@@ -111,7 +111,6 @@ public class Logic {
 	    }
         String sqlUpdate = "UPDATE url_data SET number_views = number_views + 1 WHERE url_data.id = "+ id +";";
 
-        System.out.println(sqlUpdate);
         try {
 	        conn = getConnection();
 	        st = conn.createStatement();
@@ -171,8 +170,9 @@ public class Logic {
     	String dateStart   = null;
     	String isEnabled   = null;
     	String dateEnd     = null;
-    	String numberViews = null;
-    	String maxView     = null;
+    	Integer numberViews = -1;
+    	Integer maxView     = -1;
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 	    try {
 	        conn = getConnection();
@@ -183,8 +183,8 @@ public class Logic {
 		    	dateStart   = rs.getString("start_date");
 		    	isEnabled   = rs.getString("is_enabled");
 		    	dateEnd     = rs.getString("end_date");
-		    	numberViews = rs.getString("number_views");
-		    	maxView     = rs.getString("max_views");
+		    	numberViews = new Integer(rs.getString("number_views"));
+		    	maxView     = new Integer(rs.getString("max_views"));
 	        }
 	    } finally {
 	 
@@ -206,7 +206,6 @@ public class Logic {
 		    
 		    if (dateStart != null) {
 		        // if startdate > today send to index.jsp
-		    	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
 		    	Date today = new Date();
 		        Date start = dateFormat.parse(dateStart);
 		    	if ( start.compareTo(today) > 0) {
@@ -215,7 +214,7 @@ public class Logic {
 		    	}
 		    }
 
-		    if (!new Integer(maxView).equals(0) && (numberViews).compareTo(maxView) > 0) {
+		    if (!maxView.equals(0) && numberViews.compareTo(maxView) > 0) {
 		        // if too much view send to index.jsp
 		        System.out.println("no more link, back to index");
 		        return "no more link, back to index";
@@ -224,7 +223,6 @@ public class Logic {
 
 		    if (dateEnd != null) {
 		        // if endDate < today send to index.jsp
-		    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd ");
 		    	Date today = new Date();
 		        Date end = dateFormat.parse(dateEnd);
 		    	if (today.compareTo(end) > 0) {
@@ -241,18 +239,18 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT password FROM url_data where id=" + urlId;
+	    String query = "SELECT * FROM url_data where id=" + urlId;
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
-	 
+
 	    try {
 	        conn = getConnection();
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
 	        
 	        if (rs.next()) {
-	        	if(rs.getString("password") != null){
+	        	if(rs.getString("password") != null && !rs.getString("password").isEmpty()){
 	        		return true;		    	
 	        	}
 	        }
