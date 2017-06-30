@@ -2,6 +2,7 @@ package com.namex.shortener;
  
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -287,6 +288,88 @@ public class Logic {
 	        			return false;
 	        		}
 	        	}
+	        }
+	    } finally {
+	 
+	        if (rs != null) {
+	        	rs.close();
+	        }
+	        if (st != null) {
+	        	st.close();
+	        }
+	        if (conn != null) {
+	        	conn.close();
+	        }
+	    } 
+	    return true;
+    }
+    
+    public Integer connectUser(String name, String password) throws Exception {
+    	//select
+		String query = "SELECT * FROM user WHERE username = '"+name+"' and password = '"+password+"';";
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+
+	    try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+	        
+	        if (rs.next()) {
+	        	return rs.getInt("id_user");
+	        }
+	    } finally {
+	 
+	        if (rs != null) {
+	        	rs.close();
+	        }
+	        if (st != null) {
+	        	st.close();
+	        }
+	        if (conn != null) {
+	        	conn.close();
+	        }
+	    } 
+	    return 0;
+    }
+    
+    public Integer addUser(String name, String password) throws Exception {
+		String sqlInsert = "INSERT INTO user (username, password) VALUES ('"+name+"', '"+password+"');";
+	    Connection conn = null;
+	    Statement st = null;
+
+	    System.out.println(sqlInsert);
+        try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        st.execute(sqlInsert);
+	        
+	        return connectUser(name, password);
+        } finally {
+	        if (st != null) {
+	            st.close();
+	        }
+	        if (conn != null) {
+	            conn.close();
+	        }
+        }
+    }
+    
+    public boolean checkUser(String name) throws Exception {
+	  
+	    String query = "SELECT * FROM user where username='" + name +"'";
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+
+	    try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+	        
+	        if (rs.next()) {
+    			return false;
 	        }
 	    } finally {
 	 

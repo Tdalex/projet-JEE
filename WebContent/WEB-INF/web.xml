@@ -17,6 +17,17 @@
     </servlet-mapping>
  	
  	<servlet>
+        <servlet-name>UserAction</servlet-name>
+        <servlet-class>com.namex.shortener.UserAction</servlet-class>
+        <load-on-startup>-1</load-on-startup>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>UserAction</servlet-name>
+        <url-pattern>/userAction</url-pattern>
+    </servlet-mapping>
+    
+ 	<servlet>
         <servlet-name>CheckPassword</servlet-name>
         <servlet-class>com.namex.shortener.CheckPassword</servlet-class>
         <load-on-startup>-1</load-on-startup>
