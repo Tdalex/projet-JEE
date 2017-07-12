@@ -44,9 +44,6 @@ public class Insert extends HttpServlet {
 	    request.getSession().setAttribute("a", "a");
 	    String a = response.encodeURL(request.getRequestURI());
 	    request.getSession().setAttribute("a", "a");
-	    System.out.println("->"+request.getRequestURI());
-	    System.out.println(a);
-	    System.out.println("shortening " + parameters.get("longUrl"));
 	    String serverName = request.getServerName();
 	    int port = request.getServerPort();
 	    String contextPath = request.getContextPath();
@@ -58,7 +55,6 @@ public class Insert extends HttpServlet {
 	 
 	        e.printStackTrace();
 	    }
-	    System.out.println("short url: " + shortUrl);
 	    request.getSession().setAttribute("shortUrl", shortUrl);
 	    response.sendRedirect("index.jsp");
     }

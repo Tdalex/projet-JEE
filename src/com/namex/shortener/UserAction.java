@@ -1,6 +1,7 @@
 package com.namex.shortener;
  
 import java.io.IOException;
+import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,9 +17,14 @@ public class UserAction extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 
+	    HttpSession session = request.getSession();
+		if (request.getParameter("type").compareTo("logout") == 0) {
+			 session.invalidate();
+		     response.sendRedirect("index.jsp");
+	    }
+		
 	    boolean verified = true;
 	    Integer ID = 0;
-	    HttpSession session = request.getSession();
 	    if(request.getParameter("name").isEmpty() || request.getParameter("password").isEmpty()){
 	        response.sendRedirect("index.jsp");	    	
 	    }
@@ -33,9 +39,9 @@ public class UserAction extends HttpServlet {
 	    if (verified == false && request.getParameter("type").compareTo("login") == 0) {
 	        try {
 				ID = new Logic().connectUser(request.getParameter("name"), request.getParameter("password"));
-				if(ID.compareTo(0) == 0){
+				if(ID.compareTo(0) != 0){
 					session.setAttribute("ID", ID);
-					session.setAttribute("name", request.getParameter("name"));
+				    session.setAttribute("name", request.getParameter("name"));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -45,14 +51,15 @@ public class UserAction extends HttpServlet {
 	    } else if(verified == true && request.getParameter("type").compareTo("register") == 0) {
 	    	try {
 				ID = new Logic().addUser(request.getParameter("name"), request.getParameter("password"));
-				if(ID.compareTo(0) == 0){
+				if(ID.compareTo(0) != 0){
 					session.setAttribute("ID", ID);
 					session.setAttribute("name", request.getParameter("name"));
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}  	
+			}
+	        response.sendRedirect("index.jsp");
 	    } else {
 	        response.sendRedirect("index.jsp");
 	    }

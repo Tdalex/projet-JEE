@@ -13,13 +13,13 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/jaxen-1.0-fcs-full.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/jsoup-1.10.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/jstl-1.1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/saxon9he.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/saxon9-test.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/saxon9-xqj.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Tanguy/Downloads/Compressed/jar/standard-1.1.2.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/jaxen-1.0-fcs-full.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/jsoup-1.10.2.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/jstl-1.1.2.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/saxon9he.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/saxon9-test.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/saxon9-xqj.jar"/>
+	<classpathentry kind="lib" path="D:/Telechargement/Compressed/jar/standard-1.1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

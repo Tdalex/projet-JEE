@@ -82,7 +82,6 @@ public class Logic {
 	        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views) VALUES('"
 	        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+")";
 
-	        System.out.println(sqlInsert);
 	        try {
 		        conn = getConnection();
 		        st = conn.createStatement();
@@ -339,7 +338,6 @@ public class Logic {
 	    Connection conn = null;
 	    Statement st = null;
 
-	    System.out.println(sqlInsert);
         try {
 	        conn = getConnection();
 	        st = conn.createStatement();
