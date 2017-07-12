@@ -4,9 +4,11 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     id="WebApp_ID" version="3.0">
     <display-name>URLShortener</display-name>
+    
 	<session-config>
     	<session-timeout>300</session-timeout>
 	</session-config>
+	
     <servlet>
         <servlet-name>Insert</servlet-name>
         <servlet-class>com.namex.shortener.Insert</servlet-class>
@@ -27,6 +29,17 @@
     <servlet-mapping>
         <servlet-name>UserAction</servlet-name>
         <url-pattern>/userAction</url-pattern>
+    </servlet-mapping>
+    
+ 	<servlet>
+        <servlet-name>UpdateShorten</servlet-name>
+        <servlet-class>com.namex.shortener.UpdateShorten</servlet-class>
+        <load-on-startup>-1</load-on-startup>
+    </servlet>
+ 
+    <servlet-mapping>
+        <servlet-name>UpdateShorten</servlet-name>
+        <url-pattern>/UpdateShorten</url-pattern>
     </servlet-mapping>
     
  	<servlet>

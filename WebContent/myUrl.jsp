@@ -21,7 +21,6 @@
 	<form action="userAction" method="POST">
 		<button type='submit' name='type' value='logout'>Logout</button>
     </form>
-	<h3>Shorten URL</h3>
     <table border="1">
 	    <tr>
 		    <th>Url</th>
@@ -30,7 +29,6 @@
 		    <th>Start date</th>
 		    <th>End date</th>
 		    <th>Has password</th>
-		    <th>Is enabled</th>
 		    <th>Modify</th>
 		    <th>Delete</th>
 	    </tr>

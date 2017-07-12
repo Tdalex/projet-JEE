@@ -7,32 +7,23 @@
 <title></title>
 </head>
 <body>
-	<h3>My Shorten Url</h3>
+	<h3>Modify Url</h3>
 	<%
         if (session.getAttribute("name") == null) {
 			 response.sendRedirect("index.jsp");
         }else{
-        	Integer id = (Integer) session.getAttribute("ID");
+        	String idUrl  = request.getParameter("update");
+        	Integer idUser = (Integer) session.getAttribute("ID");
     %>    
 	<a href='index.jsp'>Home</a>
+	<a href='myUrl.jsp'>My Shorten</a>
 	<form action="userAction" method="POST">
 		<button type='submit' name='type' value='logout'>Logout</button>
     </form>
-	<h3>Shorten URL</h3>
-    <table border="1">
-	    <tr>
-		    <th>Url</th>
-		    <th>Shorten</th>
-		    <th>Views</th>
-		    <th>Start date</th>
-		    <th>End date</th>
-		    <th>Has password</th>
-		    <th>Is enabled</th>
-		    <th>Modify</th>
-		    <th>Delete</th>
-	    </tr>
-	    <%=new Logic().getUserUrl(id)%>
-    </table>
+    <form action="updateShorten" method="POST">
+	    <%=new Logic().getModifyShorten(idUrl, idUser)%>    
+        <input type="submit" value="Update Shorten" />
+    </form>
 	<%
         }
     %>

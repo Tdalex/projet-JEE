@@ -430,12 +430,95 @@ public class Logic {
 		    	message     += "<td>"+ rs.getString("start_date") +"</td>";    
 		    	message     += "<td>"+ rs.getString("end_date") +"</td>";    
 		    	message     += "<td>"+ hasPassword +"</td>";    
-		    	message     += "<td>"+ isEnabled +"</td>";   
-		    	message     += "<td><a href='modifyShorten.jsp' >Update</a></td>";    
-		    	message     += "<td><a href='modifyShorten.jsp' >Delete</a></td></tr>";     	  	
+		    	message     += "<td><a href='ModifyShorten.jsp?update="+ rs.getString("id") +"' >Update</a></td>";    
+		    	message     += "<td><a href='UpdateShorten?delete="+ rs.getString("id") +"' >Delete</a></td></tr>";     	  	
 	        }
 	    } finally {
 	    }
     	return message;
+    }
+    
+    public String getModifyShorten(String urlID, Integer userID) throws Exception {
+
+        System.out.println(userID);
+	    String query = "SELECT * FROM url_data where author=" + userID +" AND id="+ urlID;
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+    	String form = "";
+    	
+	    try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+
+	        if (rs.next()) {		    		
+	    		form     += "Long URL: <input type='text' name='longUrl' size='100' value='"+ rs.getString("long_url") +"' ></input><br>";   
+		    	form     += "Password: <input type='password' name='password' size='100' value='"+ rs.getString("password") +"'></input></br>";      	  	
+	    		form     += "Max view: <input type='text' name='maxView' size='100' value='"+ rs.getString("max_views") +"' ></input><br>";   
+	    		form     += "Date start (format yyyy-mm-dd): <input type='text' name='dateStart' size='100' value='"+ rs.getString("start_date") +"' ></input><br>";   
+	    		form     += "Date end (format yyyy-mm-dd): <input type='text' name='dateEnd' size='100' value='"+ rs.getString("end_date") +"' ></input><br>";   
+	        }
+	    } finally {
+	    }
+    	return form;
+    }
+    
+    public Boolean deleteUrl(String idUrl, Integer author) throws Exception {
+		String sqlInsert = "DELETE FROM url_data WHERE id="+idUrl+" AND author="+author+";";
+	    Connection conn = null;
+	    Statement st = null;
+
+        try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        st.execute(sqlInsert);
+        } finally {
+	        if (st != null) {
+	            st.close();
+	        }
+	        if (conn != null) {
+	            conn.close();
+	        }
+        }
+        return true;
+    }
+    
+    public Boolean updateUrl( Map<String, String> parameters, Integer author) throws Exception {
+	    Connection conn = null;
+	    Statement st = null;
+	    String id = getId(parameters.get("id"));
+	    if (id != null) {
+	    	int maxView = 0;
+	    	try {
+    		   maxView = Integer.parseInt(parameters.get("maxView"));
+    		} catch(Exception e){
+    		}
+	    	String start = "null";
+	    	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
+	    		start = "'"+parameters.get("dateStart")+"'";
+	    	}
+	    	
+	    	String end = "null";
+	    	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
+	    		end = "'"+parameters.get("dateEnd")+"'";
+	    	}
+	    	String sqlUpdate = "UPDATE url_data SET long_url = '"+parameters.get("longUrl").trim()+"', password = '"+parameters.get("password")+"', start_date = "+start+", end_date = "+end+", max_views = "+maxView+" WHERE id="+id+" AND author="+author+";";
+
+	        try {
+		        conn = getConnection();
+		        st = conn.createStatement();
+		        st.execute(sqlUpdate);
+		        } finally {
+		        if (st != null) {
+		            st.close();
+		        }
+		        if (conn != null) {
+		            conn.close();
+		        }
+	        }
+	        id = getId(parameters.get("longUrl"));
+	    }  
+	   return true;
     }
 }
