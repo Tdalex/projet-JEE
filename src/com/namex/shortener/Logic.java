@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import java.util.Date;
@@ -386,7 +387,7 @@ public class Logic {
 	    return true;
     }
     
-    public String getUserUrl(Integer userID) throws Exception {
+    public String getUserUrl(String serverName,int port, String contextPath, Integer userID) throws Exception {
 
         System.out.println(userID);
 	    String query = "SELECT * FROM url_data where author=" + userID;
@@ -402,7 +403,7 @@ public class Logic {
 	        conn = getConnection();
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
-	        
+		    
 	        if (rs.next()) {	
 	    		if (new Integer(rs.getInt("max_views")).compareTo(0) == 0) {
 	    			nbViews = rs.getString("number_views");
@@ -421,16 +422,17 @@ public class Logic {
 	    		}else {
 	    			isEnabled = "no";
 	    		}
+	    		String shorten = "http://" + serverName + ":" + port + contextPath + "/" + rs.getString("id");
 	    		
-		    	message     += "<tr><td>"+ rs.getString("long_url") +"</td>";   
-		    	message     += "<td>"+ rs.getString("id") +"</td>";    
+		    	message     += "<tr><td><a href='"+ rs.getString("long_url") +"' >"+ rs.getString("long_url") +"</a></td>";   
+		    	message     += "<td><a href='"+shorten+"' >"+shorten+"</a></td>";    
 		    	message     += "<td>"+ nbViews  +"</td>";    
 		    	message     += "<td>"+ rs.getString("start_date") +"</td>";    
 		    	message     += "<td>"+ rs.getString("end_date") +"</td>";    
 		    	message     += "<td>"+ hasPassword +"</td>";    
 		    	message     += "<td>"+ isEnabled +"</td>";   
-		    	message     += "<td>Update</td>";    
-		    	message     += "<td>Delete</td></tr>";     	  	
+		    	message     += "<td><a href='modifyShorten.jsp' >Update</a></td>";    
+		    	message     += "<td><a href='modifyShorten.jsp' >Delete</a></td></tr>";     	  	
 	        }
 	    } finally {
 	    }

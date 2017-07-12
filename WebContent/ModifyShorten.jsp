@@ -13,9 +13,6 @@
 			 response.sendRedirect("index.jsp");
         }else{
         	Integer id = (Integer) session.getAttribute("ID");
-	        String serverName = request.getServerName();
-		    int port = request.getServerPort();
-		    String contextPath = request.getContextPath();
     %>    
 	<a href='index.jsp'>Home</a>
 	<form action="userAction" method="POST">
@@ -34,7 +31,7 @@
 		    <th>Modify</th>
 		    <th>Delete</th>
 	    </tr>
-	    <%=new Logic().getUserUrl(serverName, port, contextPath, id)%>
+	    <%=new Logic().getUserUrl(id)%>
     </table>
 	<%
         }
