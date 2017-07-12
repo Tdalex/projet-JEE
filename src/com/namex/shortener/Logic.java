@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
 import java.util.Date;
  
 public class Logic {
@@ -53,10 +56,9 @@ public class Logic {
 	    return id;
     }
  
-    public String getShort(String serverName, int port, String contextPath, Map<String, String> parameters) throws Exception {
+    public String getShort(String serverName, int port, String contextPath, Map<String, String> parameters, Integer author) throws Exception {
 
 	    Connection conn = null;
-	 
 	    Statement st = null;
 	    String id = getId(parameters.get("longUrl"));// check if URL has been shorten already
 	    if (id != null) {
@@ -79,8 +81,8 @@ public class Logic {
 	    		end = "'"+parameters.get("dateEnd")+"'";
 	    	}
 	    	
-	        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views) VALUES('"
-	        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+")";
+	        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views, author) VALUES('"
+	        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+","+author+")";
 
 	        try {
 		        conn = getConnection();
@@ -382,5 +384,56 @@ public class Logic {
 	        }
 	    } 
 	    return true;
+    }
+    
+    public String getUserUrl(Integer userID) throws Exception {
+
+        System.out.println(userID);
+	    String query = "SELECT * FROM url_data where author=" + userID;
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+    	String message = "";
+    	String nbViews = "";
+    	String hasPassword = "";
+    	String isEnabled = "";
+    	
+	    try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+	        
+	        if (rs.next()) {	
+	    		if (new Integer(rs.getInt("max_views")).compareTo(0) == 0) {
+	    			nbViews = rs.getString("number_views");
+	    		}else {
+	    			nbViews = rs.getString("number_views") + "/" + rs.getString("max_views");
+	    		}
+	    		
+	    		if (rs.getString("password") == null | rs.getString("password").length() == 0) {
+	    			hasPassword = "no";
+	    		}else {
+	    			hasPassword = "yes";
+	    		}
+
+	    		if (new Integer(rs.getInt("is_enabled")).compareTo(0) != 0) {
+	    			isEnabled = "yes";
+	    		}else {
+	    			isEnabled = "no";
+	    		}
+	    		
+		    	message     += "<tr><td>"+ rs.getString("long_url") +"</td>";   
+		    	message     += "<td>"+ rs.getString("id") +"</td>";    
+		    	message     += "<td>"+ nbViews  +"</td>";    
+		    	message     += "<td>"+ rs.getString("start_date") +"</td>";    
+		    	message     += "<td>"+ rs.getString("end_date") +"</td>";    
+		    	message     += "<td>"+ hasPassword +"</td>";    
+		    	message     += "<td>"+ isEnabled +"</td>";   
+		    	message     += "<td>Update</td>";    
+		    	message     += "<td>Delete</td></tr>";     	  	
+	        }
+	    } finally {
+	    }
+    	return message;
     }
 }

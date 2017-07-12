@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
  
 public class Insert extends HttpServlet {
@@ -32,7 +33,8 @@ public class Insert extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
- 
+    	
+	    HttpSession session = request.getSession();
     	Map<String, String> parameters = new HashMap<String, String>();
     	
     	parameters.put("longUrl" , request.getParameter("longUrl"));
@@ -48,9 +50,13 @@ public class Insert extends HttpServlet {
 	    int port = request.getServerPort();
 	    String contextPath = request.getContextPath();
 	    String shortUrl = null;
-
+	    Integer author = 0;
+ 	    if (session.getAttribute("ID") != null) {
+	       	author = (Integer) session.getAttribute("ID");
+	    }
+	    
 	    try {
-	        shortUrl = new Logic().getShort(serverName, port, contextPath, parameters);
+	        shortUrl = new Logic().getShort(serverName, port, contextPath, parameters, author);
 	    } catch (Exception e) {
 	 
 	        e.printStackTrace();

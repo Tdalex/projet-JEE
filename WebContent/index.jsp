@@ -32,6 +32,7 @@
         }else{
     %>    
 	<h3>Welcome <%=session.getAttribute("name")%></h3>
+	<a href='myUrl.jsp'>My Shorten Url</a>
 	<form action="userAction" method="POST">
 		<button type='submit' name='type' value='logout'>Logout</button>
     </form>

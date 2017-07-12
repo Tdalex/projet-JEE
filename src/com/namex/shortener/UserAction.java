@@ -21,47 +21,47 @@ public class UserAction extends HttpServlet {
 		if (request.getParameter("type").compareTo("logout") == 0) {
 			 session.invalidate();
 		     response.sendRedirect("index.jsp");
-	    }
-		
-	    boolean verified = true;
-	    Integer ID = 0;
-	    if(request.getParameter("name").isEmpty() || request.getParameter("password").isEmpty()){
-	        response.sendRedirect("index.jsp");	    	
-	    }
-	    
-        try {
-        	verified = new Logic().checkUser(request.getParameter("name"));
-        } catch (Exception e) {
-	        // handling exception here
-	        e.printStackTrace();
-        }
-	        
-	    if (verified == false && request.getParameter("type").compareTo("login") == 0) {
+	    }else{			
+		    boolean verified = true;
+		    Integer ID = 0;
+		    if(request.getParameter("name").isEmpty() || request.getParameter("password").isEmpty()){
+		        response.sendRedirect("index.jsp");	    	
+		    }
+		    
 	        try {
-				ID = new Logic().connectUser(request.getParameter("name"), request.getParameter("password"));
-				if(ID.compareTo(0) != 0){
-					session.setAttribute("ID", ID);
-				    session.setAttribute("name", request.getParameter("name"));
+	        	verified = new Logic().checkUser(request.getParameter("name"));
+	        } catch (Exception e) {
+		        // handling exception here
+		        e.printStackTrace();
+	        }
+	
+		    if (verified == false && request.getParameter("type").compareTo("login") == 0) {
+		        try {
+					ID = new Logic().connectUser(request.getParameter("name"), request.getParameter("password"));
+					if(ID.compareTo(0) != 0){
+						session.setAttribute("ID", ID);
+					    session.setAttribute("name", request.getParameter("name"));
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}  	
+		        response.sendRedirect("index.jsp");
+		    } else if(verified == true && request.getParameter("type").compareTo("register") == 0) {
+		    	try {
+					ID = new Logic().addUser(request.getParameter("name"), request.getParameter("password"));
+					if(ID.compareTo(0) != 0){
+						session.setAttribute("ID", ID);
+						session.setAttribute("name", request.getParameter("name"));
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}  	
-	        response.sendRedirect("index.jsp");
-	    } else if(verified == true && request.getParameter("type").compareTo("register") == 0) {
-	    	try {
-				ID = new Logic().addUser(request.getParameter("name"), request.getParameter("password"));
-				if(ID.compareTo(0) != 0){
-					session.setAttribute("ID", ID);
-					session.setAttribute("name", request.getParameter("name"));
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	        response.sendRedirect("index.jsp");
-	    } else {
-	        response.sendRedirect("index.jsp");
+		        response.sendRedirect("index.jsp");
+		    } else {
+		        response.sendRedirect("index.jsp");
+		    }
 	    }
     }
  
