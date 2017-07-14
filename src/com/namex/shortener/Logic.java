@@ -172,7 +172,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT long_url FROM url_data where id=" + urlId;
+	    String query = "SELECT long_url FROM url_data where id=" + urlId+"OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
