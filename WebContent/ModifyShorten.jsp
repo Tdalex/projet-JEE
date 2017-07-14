@@ -20,7 +20,7 @@
 	<form action="userAction" method="POST">
 		<button type='submit' name='type' value='logout'>Logout</button>
     </form>
-    <form action="updateShorten" method="POST">
+    <form action="UpdateShorten" method="POST">
 	    <%=new Logic().getModifyShorten(idUrl, idUser)%>    
         <input type="submit" value="Update Shorten" />
     </form>

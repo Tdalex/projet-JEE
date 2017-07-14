@@ -44,13 +44,13 @@ public class UpdateShorten extends HttpServlet {
         	}else if(updateUrl != null){
 		    	Map<String, String> parameters = new HashMap<String, String>();
 		    	
-		    	parameters.put("id" , deleteUrl);		    	
+		    	parameters.put("id" , updateUrl);		    	
 		    	parameters.put("longUrl" , request.getParameter("longUrl"));
 		    	parameters.put("maxView" , request.getParameter("maxView"));
 		    	parameters.put("dateStart" , request.getParameter("dateStart"));
 		    	parameters.put("dateEnd" , request.getParameter("dateEnd"));
 		    	parameters.put("password" , request.getParameter("password"));
-				    
+
 			    try {
 			        new Logic().updateUrl(parameters, author);
 			    } catch (Exception e) {

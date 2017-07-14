@@ -404,7 +404,7 @@ public class Logic {
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
 		    
-	        if (rs.next()) {	
+	        while (rs.next()) {	
 	    		if (new Integer(rs.getInt("max_views")).compareTo(0) == 0) {
 	    			nbViews = rs.getString("number_views");
 	    		}else {
@@ -452,7 +452,8 @@ public class Logic {
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
 
-	        if (rs.next()) {		    		
+	        if (rs.next()) {		
+	    		form     += "<input type='hidden' name='update' value='"+ urlID +"' ></input>";       		
 	    		form     += "Long URL: <input type='text' name='longUrl' size='100' value='"+ rs.getString("long_url") +"' ></input><br>";   
 		    	form     += "Password: <input type='password' name='password' size='100' value='"+ rs.getString("password") +"'></input></br>";      	  	
 	    		form     += "Max view: <input type='text' name='maxView' size='100' value='"+ rs.getString("max_views") +"' ></input><br>";   
@@ -487,7 +488,7 @@ public class Logic {
     public Boolean updateUrl( Map<String, String> parameters, Integer author) throws Exception {
 	    Connection conn = null;
 	    Statement st = null;
-	    String id = getId(parameters.get("id"));
+	    String id = parameters.get("id");
 	    if (id != null) {
 	    	int maxView = 0;
 	    	try {
