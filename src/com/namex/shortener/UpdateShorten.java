@@ -47,6 +47,7 @@ public class UpdateShorten extends HttpServlet {
 		    	parameters.put("id" , updateUrl);		    	
 		    	parameters.put("longUrl" , request.getParameter("longUrl"));
 		    	parameters.put("maxView" , request.getParameter("maxView"));
+		    	parameters.put("customShort" , request.getParameter("customShort"));
 		    	parameters.put("dateStart" , request.getParameter("dateStart"));
 		    	parameters.put("dateEnd" , request.getParameter("dateEnd"));
 		    	parameters.put("password" , request.getParameter("password"));

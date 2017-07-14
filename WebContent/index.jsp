@@ -39,10 +39,11 @@
 	<h3>Shorten URL</h3>
     <form action="insert" method="GET">
         Long URL: <input type="text" name="longUrl" size="100" /><br> 
-        Max view: <input type="text" name="maxView" size="100" /> <br> 
+        Custom short URL: <input type="text" maxlength='20' name="customShort" size="100" /><br> 
+        Max view: <input type="number" name="maxView" size="100" /> <br> 
         Password: <input type="password" name="password" size="100" /><br> 
-        Date start (format yyyy-mm-dd): <input type="text" name="dateStart" size="100" /> <br> 
-        Date end (format yyyy-mm-dd): <input type="text" name="dateEnd" size="100" /> <br>        
+        Date start (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateStart" size="100" /> <br> 
+        Date end (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateEnd" size="100" /> <br>        
         <input type="submit" value="Get Short !" />
     </form>
 	<%

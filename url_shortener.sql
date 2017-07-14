@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 07 Juin 2017 à 14:03
+-- Généré le :  Ven 14 Juillet 2017 à 09:58
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -34,26 +34,21 @@ CREATE TABLE `url_data` (
   `end_date` datetime(6) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `number_views` int(10) NOT NULL DEFAULT '0',
-  `max_views` int(10) NOT NULL DEFAULT '0'
+  `max_views` int(10) NOT NULL DEFAULT '0',
+  `author` int(11) DEFAULT NULL,
+  `custom_short` varchar(20) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 --
 -- Contenu de la table `url_data`
 --
 
-INSERT INTO `url_data` (`id`, `long_url`, `start_date`, `is_enabled`, `end_date`, `password`, `number_views`, `max_views`) VALUES
-(1, '', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(2, 'https://github.com/alexb31/Ruby-project', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(3, 'rfh', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(4, 'http://www.routard.com/idees-week-end/cid133610-nos-52-week-ends-coups-de-coeur-dans-les-villes-d-europe.html', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(5, 'http://www.routard.com/idees-week-end/cid133610-nos-52-week-ends-coups-de-coeur-dans-les-villes-d-europe.html', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(6, 'http://picbear.com/place/244936460', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(7, 'https://www.voyagespirates.fr/sejours/vacances-dete-en-sardaigne-7-jours-a-236-euro-dans-une-petite-maison-a-5-minutes-de-la-plage-vols-et-location-de-voiture-inclus_16360', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(8, 'http://localhost/url_shortener/index.jsp', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(9, 'https://www.google.fr/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#safe=off&q=zend+framework+tutorial', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(10, 'https://www.google.fr/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#safe=off&q=zend+framework+tutorial', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(11, 'http://www.cdiscount.com/', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0),
-(12, 'https://github.com/eelbahri/pokedexRails/tree/master/app', '2017-06-07 16:02:49', 1, NULL, NULL, 0, 0);
+INSERT INTO `url_data` (`id`, `long_url`, `start_date`, `is_enabled`, `end_date`, `password`, `number_views`, `max_views`, `author`, `custom_short`) VALUES
+(13, 'totozeze', '1994-12-12 00:00:00', 1, '2020-12-12 00:00:00.000000', 'aze', 0, 21, 1, NULL),
+(15, 'plolp', '1999-11-11 00:00:00', 1, '2057-12-12 00:00:00.000000', 'plop', 0, 987, 1, NULL),
+(16, 'coin', '1997-12-12 00:00:00', 1, '2007-12-12 00:00:00.000000', 'azeea', 0, 123, 1, 'aze'),
+(17, 'opopo', '1997-12-12 00:00:00', 1, '0201-12-12 00:00:00.000000', 'azeaze', 0, 123, 1, NULL),
+(18, 'azezae', '1997-12-04 00:00:00', 1, '2007-12-12 00:00:00.000000', 'azezazeaz', 0, 123, 1, 'iuazezeazeazezaezaez');
 
 -- --------------------------------------------------------
 
@@ -66,6 +61,16 @@ CREATE TABLE `user` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `user`
+--
+
+INSERT INTO `user` (`id_user`, `username`, `password`) VALUES
+(1, 'toto', 'toto'),
+(2, 'tata', 'tata'),
+(3, 'tutu', 'tutu'),
+(4, 'tptp', 'tptp');
 
 --
 -- Index pour les tables exportées
@@ -91,12 +96,12 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT pour la table `url_data`
 --
 ALTER TABLE `url_data`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

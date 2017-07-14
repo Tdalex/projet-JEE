@@ -56,52 +56,93 @@ public class Logic {
 	    }
 	    return id;
     }
+    
+    public Boolean shortExist(String customShort) throws Exception {
+	    Connection conn = null;
+	    ResultSet rs = null;
+	    Statement st = null;
+	 
+	    String query = "SELECT id FROM url_data WHERE custom_short='"
+	        + customShort.trim() + "'";
+	    String id = null;
+	    try {
+	        try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        rs = st.executeQuery(query);
+	        if (rs.next()) {
+	            return true;
+	        }
+	        } finally {
+	 
+	        if (rs != null) {
+	            rs.close();
+	        }
+	        if (st != null) {
+	            st.close();
+	        }
+	        if (conn != null) {
+	            conn.close();
+	        }
+	        }
+	    } catch (Exception e) {
+	        throw e;
+	    }
+	    return false;
+    }
  
     public String getShort(String serverName, int port, String contextPath, Map<String, String> parameters, Integer author) throws Exception {
 
-	    Connection conn = null;
-	    Statement st = null;
-	    String id = getId(parameters.get("longUrl"));// check if URL has been shorten already
-	    if (id != null) {
-	        // if id is not null, this link has been shorten already.
-	        // nothing to do
-	    } else {
-	        // at this point id is null, make it shorter
-	    	int maxView = 0;
-	    	try {
-    		   maxView = Integer.parseInt(parameters.get("maxView"));
-    		} catch(Exception e){
+	    Connection conn    = null;
+	    Statement st       = null;
+	    String customShort = null;
+        String shortUrl    = null;
+        
+    	// at this point id is null, make it shorter
+    	int maxView = 0;
+    	try {
+		   maxView = Integer.parseInt(parameters.get("maxView"));
+		} catch(Exception e){
+		}
+    	String start = "null";
+    	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
+    		start = "'"+parameters.get("dateStart")+"'";
+    	}
+    	
+    	String end = "null";
+    	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
+    		end = "'"+parameters.get("dateEnd")+"'";
+    	}
+    	
+    	if(parameters.get("customShort") != null && !parameters.get("customShort").isEmpty()){
+    		if(false == shortExist(parameters.get("customShort"))){
+    			customShort = "'"+parameters.get("customShort").trim()+"'";
+    			shortUrl = parameters.get("customShort").trim();
     		}
-	    	String start = "null";
-	    	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
-	    		start = "'"+parameters.get("dateStart")+"'";
-	    	}
-	    	
-	    	String end = "null";
-	    	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
-	    		end = "'"+parameters.get("dateEnd")+"'";
-	    	}
-	    	
-	        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views, author) VALUES('"
-	        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+","+author+")";
+    	}
+    	
+        String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views, custom_short, author) VALUES('"
+        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+","+customShort+","+author+")";
 
-	        try {
-		        conn = getConnection();
-		        st = conn.createStatement();
-		        st.execute(sqlInsert);
-		        } finally {
-		        if (st != null) {
-		            st.close();
-		        }
-		        if (conn != null) {
-		            conn.close();
-		        }
+        try {
+	        conn = getConnection();
+	        st = conn.createStatement();
+	        st.execute(sqlInsert);
+	        } finally {
+	        if (st != null) {
+	            st.close();
 	        }
-	        // after we insert the record, we obtain the ID as identifier of our
-	        // new short link
-	        id = getId(parameters.get("longUrl"));
-	    }  
-	   return "http://" + serverName + ":" + port + contextPath + "/" + id;
+	        if (conn != null) {
+	            conn.close();
+	        }
+        }
+        // after we insert the record, we obtain the ID as identifier of our
+        // new short link
+        if(shortUrl == null){
+        	shortUrl = getId(parameters.get("longUrl"));
+        }
+        
+	   return "http://" + serverName + ":" + port + contextPath + "/" + shortUrl;
     }
     
     public Boolean addViewUrl(String id) throws Exception {
@@ -390,14 +431,14 @@ public class Logic {
     public String getUserUrl(String serverName,int port, String contextPath, Integer userID) throws Exception {
 
         System.out.println(userID);
-	    String query = "SELECT * FROM url_data where author=" + userID;
-	    Connection conn = null;
-	    ResultSet rs = null;
-	    Statement st = null;
-    	String message = "";
-    	String nbViews = "";
+	    String query 	   = "SELECT * FROM url_data where author=" + userID;
+	    Connection conn    = null;
+	    ResultSet rs       = null;
+	    Statement st       = null;
+    	String message     = "";
+    	String nbViews     = "";
     	String hasPassword = "";
-    	String isEnabled = "";
+    	String shorten     = "http://" + serverName + ":" + port + contextPath + "/";
     	
 	    try {
 	        conn = getConnection();
@@ -417,12 +458,11 @@ public class Logic {
 	    			hasPassword = "yes";
 	    		}
 
-	    		if (new Integer(rs.getInt("is_enabled")).compareTo(0) != 0) {
-	    			isEnabled = "yes";
+	    		if(rs.getString("custom_short") != null) {
+	    			shorten += rs.getString("custom_short");
 	    		}else {
-	    			isEnabled = "no";
+	    			shorten += rs.getString("id");	    			
 	    		}
-	    		String shorten = "http://" + serverName + ":" + port + contextPath + "/" + rs.getString("id");
 	    		
 		    	message     += "<tr><td><a href='"+ rs.getString("long_url") +"' >"+ rs.getString("long_url") +"</a></td>";   
 		    	message     += "<td><a href='"+shorten+"' >"+shorten+"</a></td>";    
@@ -431,7 +471,8 @@ public class Logic {
 		    	message     += "<td>"+ rs.getString("end_date") +"</td>";    
 		    	message     += "<td>"+ hasPassword +"</td>";    
 		    	message     += "<td><a href='ModifyShorten.jsp?update="+ rs.getString("id") +"' >Update</a></td>";    
-		    	message     += "<td><a href='UpdateShorten?delete="+ rs.getString("id") +"' >Delete</a></td></tr>";     	  	
+		    	message     += "<td><a href='UpdateShorten?delete="+ rs.getString("id") +"' >Delete</a></td></tr>"; 
+		    	shorten     = "http://" + serverName + ":" + port + contextPath + "/";
 	        }
 	    } finally {
 	    }
@@ -446,19 +487,27 @@ public class Logic {
 	    ResultSet rs = null;
 	    Statement st = null;
     	String form = "";
+    	String shorten = "";
     	
 	    try {
 	        conn = getConnection();
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
-
-	        if (rs.next()) {		
+	        
+	     
+	        
+	        if (rs.next()) {	
+	        	if(rs.getString("custom_short") != null) {
+	       			shorten += rs.getString("custom_short");
+	       		}
+	        	
 	    		form     += "<input type='hidden' name='update' value='"+ urlID +"' ></input>";       		
-	    		form     += "Long URL: <input type='text' name='longUrl' size='100' value='"+ rs.getString("long_url") +"' ></input><br>";   
+	    		form     += "Long URL: <input type='text' name='longUrl' size='100' value='"+ rs.getString("long_url") +"' ></input><br>";  
+	    		form     += "Custom short URL: <input type='text' name='customShort' maxlength='20' size='100' value='"+ shorten +"' ></input><br>";   
 		    	form     += "Password: <input type='password' name='password' size='100' value='"+ rs.getString("password") +"'></input></br>";      	  	
-	    		form     += "Max view: <input type='text' name='maxView' size='100' value='"+ rs.getString("max_views") +"' ></input><br>";   
-	    		form     += "Date start (format yyyy-mm-dd): <input type='text' name='dateStart' size='100' value='"+ rs.getString("start_date") +"' ></input><br>";   
-	    		form     += "Date end (format yyyy-mm-dd): <input type='text' name='dateEnd' size='100' value='"+ rs.getString("end_date") +"' ></input><br>";   
+	    		form     += "Max view: <input type='number' name='maxView' size='100' value='"+ rs.getString("max_views") +"' ></input><br>";   
+	    		form     += "Date start (format yyyy-mm-dd): <input type='text' maxlength='10' name='dateStart' size='100' value='"+ rs.getString("start_date") +"' ></input><br>";   
+	    		form     += "Date end (format yyyy-mm-dd): <input type='text' maxlength='10' name='dateEnd' size='100' value='"+ rs.getString("end_date") +"' ></input><br>";   
 	        }
 	    } finally {
 	    }
@@ -489,13 +538,23 @@ public class Logic {
 	    Connection conn = null;
 	    Statement st = null;
 	    String id = parameters.get("id");
+	    
 	    if (id != null) {
 	    	int maxView = 0;
 	    	try {
     		   maxView = Integer.parseInt(parameters.get("maxView"));
     		} catch(Exception e){
     		}
+	    	
 	    	String start = "null";
+	    	String customShort = null;
+	    	
+	    	if(parameters.get("customShort") != null && !parameters.get("customShort").isEmpty()){
+	    		if(false == shortExist(parameters.get("customShort"))){
+	    			customShort = "'"+parameters.get("customShort").trim()+"'";
+	    		}
+	    	}
+	    	
 	    	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
 	    		start = "'"+parameters.get("dateStart")+"'";
 	    	}
@@ -504,7 +563,8 @@ public class Logic {
 	    	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
 	    		end = "'"+parameters.get("dateEnd")+"'";
 	    	}
-	    	String sqlUpdate = "UPDATE url_data SET long_url = '"+parameters.get("longUrl").trim()+"', password = '"+parameters.get("password")+"', start_date = "+start+", end_date = "+end+", max_views = "+maxView+" WHERE id="+id+" AND author="+author+";";
+	    	
+	    	String sqlUpdate = "UPDATE url_data SET long_url = '"+parameters.get("longUrl").trim()+"', password = '"+parameters.get("password")+"', start_date = "+start+", end_date = "+end+", custom_short = "+customShort+", max_views = "+maxView+" WHERE id="+id+" AND author="+author+";";
 
 	        try {
 		        conn = getConnection();
@@ -518,7 +578,6 @@ public class Logic {
 		            conn.close();
 		        }
 	        }
-	        id = getId(parameters.get("longUrl"));
 	    }  
 	   return true;
     }
