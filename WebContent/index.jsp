@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<h3>Login</h3>
@@ -26,6 +27,7 @@
 	<h3>Shorten URL</h3>
     <form action="insert" method="GET">
         Long URL: <input type="text" name="longUrl" size="100" /><br> 
+        <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>
         <input type="submit" value="Get Short !" />
     </form>
 	<%
@@ -43,7 +45,8 @@
         Max view: <input type="number" name="maxView" size="100" /> <br> 
         Password: <input type="password" name="password" size="100" /><br> 
         Date start (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateStart" size="100" /> <br> 
-        Date end (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateEnd" size="100" /> <br>        
+        Date end (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateEnd" size="100" /> <br> 
+        <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>       
         <input type="submit" value="Get Short !" />
     </form>
 	<%

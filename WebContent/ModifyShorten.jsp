@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title></title>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 	<h3>Modify Url</h3>
@@ -22,6 +23,7 @@
     </form>
     <form action="UpdateShorten" method="POST">
 	    <%=new Logic().getModifyShorten(idUrl, idUser)%>    
+	    <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>
         <input type="submit" value="Update Shorten" />
     </form>
 	<%
