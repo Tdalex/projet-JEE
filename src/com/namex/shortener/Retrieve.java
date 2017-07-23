@@ -40,7 +40,6 @@ public class Retrieve extends HttpServlet {
 	        // if long url not found, send to index.jsp
 	        System.out.println("long url not found");
 	        out.println("<p>long url not found</p>");
-	       // response.sendRedirect("index.jsp");
 	    } else if (error != null) {
 	        // if long url not found, send to index.jsp
 	        System.out.println(error);
@@ -61,7 +60,7 @@ public class Retrieve extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	       //response.sendRedirect(longUrl);
+	        response.sendRedirect(longUrl);
 	    }
         out.println("<a href='index.jsp'>Back to index</p>");
 	    out.println("</body></html>");

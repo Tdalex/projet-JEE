@@ -27,7 +27,7 @@
 	<h3>Shorten URL</h3>
     <form action="insert" method="GET">
         Long URL: <input type="text" name="longUrl" size="100" /><br> 
-        <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>
+        <!--  <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>   -->    
         <input type="submit" value="Get Short !" />
     </form>
 	<%
@@ -46,7 +46,7 @@
         Password: <input type="password" name="password" size="100" /><br> 
         Date start (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateStart" size="100" /> <br> 
         Date end (format yyyy-mm-dd): <input type="text" maxlength='10' name="dateEnd" size="100" /> <br> 
-        <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>       
+        <!--  <div class="g-recaptcha" data-sitekey="6LcWYCkUAAAAAGw-Dr-HXztPiGbGGajgbdOOQhEn"></div>   -->    
         <input type="submit" value="Get Short !" />
     </form>
 	<%

@@ -2,15 +2,11 @@ package com.namex.shortener;
  
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import java.util.Date;
  
@@ -64,7 +60,7 @@ public class Logic {
 	 
 	    String query = "SELECT id FROM url_data WHERE custom_short='"
 	        + customShort.trim() + "'";
-	    String id = null;
+
 	    try {
 	        try {
 	        conn = getConnection();
@@ -104,7 +100,7 @@ public class Logic {
 		   maxView = Integer.parseInt(parameters.get("maxView"));
 		} catch(Exception e){
 		}
-    	String start = "null";
+    	String start = "now()";
     	if(parameters.get("dateStart") != null && !parameters.get("dateStart").isEmpty()){
     		start = "'"+parameters.get("dateStart")+"'";
     	}
@@ -113,6 +109,11 @@ public class Logic {
     	if(parameters.get("dateEnd") != null && !parameters.get("dateEnd").isEmpty()){
     		end = "'"+parameters.get("dateEnd")+"'";
     	}
+
+	    String password = null;
+    	if(parameters.get("password") != null && !parameters.get("password").isEmpty()){
+    		password = "'"+parameters.get("password")+"'";
+    	}
     	
     	if(parameters.get("customShort") != null && !parameters.get("customShort").isEmpty()){
     		if(false == shortExist(parameters.get("customShort"))){
@@ -120,10 +121,11 @@ public class Logic {
     			shortUrl = parameters.get("customShort").trim();
     		}
     	}
-    	
+    	   	
         String sqlInsert = "INSERT INTO url_data(long_url, password, start_date, end_date, max_views, custom_short, author) VALUES('"
-        + parameters.get("longUrl").trim() + "','"+parameters.get("password")+"',"+start+","+end+","+maxView+","+customShort+","+author+")";
+        + parameters.get("longUrl").trim() + "',"+password+","+start+","+end+","+maxView+","+customShort+","+author+")";
 
+        System.out.println(sqlInsert);
         try {
 	        conn = getConnection();
 	        st = conn.createStatement();
@@ -172,7 +174,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT long_url FROM url_data where id=" + urlId+"OR custom_short = '"+ urlId +"'";
+	    String query = "SELECT long_url FROM url_data where id="+ urlId+" OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
@@ -198,7 +200,7 @@ public class Logic {
 	        	conn.close();
 	        }
 	    } 
-	    return longUrl;
+	    return "http://"+longUrl;
     }
     
     public String getErrorUrl(String urlId) throws Exception {
@@ -281,11 +283,12 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT * FROM url_data where id=" + urlId;
+	    String query = "SELECT * FROM url_data where id="+urlId+" OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
 
+        System.out.println(query);
 	    try {
 	        conn = getConnection();
 	        st = conn.createStatement();
