@@ -61,6 +61,7 @@
     <br />
     <br />
     <%=session.getAttribute("shortUrl")%>
+    <%session.removeAttribute("shortUrl");%>
  
     <%
         }
