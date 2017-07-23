@@ -7,7 +7,7 @@
 <title></title>
 </head>
 <body>
-	<h3>My Shorten Url</h3>
+	<h3>My Shorten Url</h3><br>
 	<%
         if (session.getAttribute("name") == null) {
 			 response.sendRedirect("index.jsp");
@@ -18,9 +18,9 @@
 		    String contextPath = request.getContextPath();
     %>    
 	<a href='index.jsp'>Home</a>
-	<form action="userAction" method="POST">
+	<form action="userAction" method="POST"><br>
 		<button type='submit' name='type' value='logout'>Logout</button>
-    </form>
+    </form><br>
     <table border="1">
 	    <tr>
 		    <th>Url</th>

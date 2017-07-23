@@ -44,7 +44,6 @@ public class Retrieve extends HttpServlet {
 	        // if long url not found, send to index.jsp
 	        System.out.println(error);
 	        out.println("<p>"+error+"</p>");
-	        response.sendRedirect("index.jsp");
 	    } else if (password != false) {
 	        // ask for password
 	        System.out.println("password please");

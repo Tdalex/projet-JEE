@@ -24,8 +24,7 @@ public class Logic {
 	    ResultSet rs = null;
 	    Statement st = null;
 	 
-	    String query = "SELECT id FROM url_data WHERE long_url='"
-	        + longUrl.trim() + "'";
+	    String query = "SELECT id FROM url_data WHERE long_url='"+ longUrl.trim() + "'";
 	    String id = null;
 	    try {
 	        try {
@@ -58,8 +57,7 @@ public class Logic {
 	    ResultSet rs = null;
 	    Statement st = null;
 	 
-	    String query = "SELECT id FROM url_data WHERE custom_short='"
-	        + customShort.trim() + "'";
+	    String query = "SELECT id FROM url_data WHERE custom_short='"+ customShort.trim() + "'";
 
 	    try {
 	        try {
@@ -153,8 +151,8 @@ public class Logic {
 	    if (id.startsWith("/")) {
 	    	id = id.replace("/", "");
 	    }
-        String sqlUpdate = "UPDATE url_data SET number_views = number_views + 1 WHERE url_data.id = "+ id +";";
-
+        String sqlUpdate = "UPDATE url_data SET number_views = number_views + 1 WHERE CAST(id as CHAR(50))= '"+ id +"' OR custom_short = '"+ id +"';";
+        System.out.println(sqlUpdate);
         try {
 	        conn = getConnection();
 	        st = conn.createStatement();
@@ -174,7 +172,8 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT long_url FROM url_data where id="+ urlId+" OR custom_short = '"+ urlId +"'";
+	    String query = "SELECT long_url FROM url_data where id='"+ urlId+"' OR custom_short = '"+ urlId +"'";
+        System.out.println(query);
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
@@ -207,7 +206,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT * FROM url_data where id=" + urlId;
+	    String query = "SELECT * FROM url_data where id='"+ urlId+"' OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
@@ -283,7 +282,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT * FROM url_data where id="+urlId+" OR custom_short = '"+ urlId +"'";
+	    String query = "SELECT * FROM url_data where id='"+urlId+"' OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
@@ -318,7 +317,7 @@ public class Logic {
 	    if (urlId.startsWith("/")) {
 	        urlId = urlId.replace("/", "");
 	    }
-	    String query = "SELECT * FROM url_data where id=" + urlId;
+	    String query = "SELECT * FROM url_data where id='"+ urlId+"' OR custom_short = '"+ urlId +"'";
 	    Connection conn = null;
 	    ResultSet rs = null;
 	    Statement st = null;
@@ -466,12 +465,17 @@ public class Logic {
 	    		}else {
 	    			shorten += rs.getString("id");	    			
 	    		}
+
+    			String end = "";
+	    		if(rs.getString("end_date") != null) {
+	    			end = rs.getString("end_date");
+	    		}
 	    		
-		    	message     += "<tr><td><a href='"+ rs.getString("long_url") +"' >"+ rs.getString("long_url") +"</a></td>";   
+		    	message     += "<tr><td><a href='http://"+ rs.getString("long_url") +"' >"+ rs.getString("long_url") +"</a></td>";   
 		    	message     += "<td><a href='"+shorten+"' >"+shorten+"</a></td>";    
 		    	message     += "<td>"+ nbViews  +"</td>";    
 		    	message     += "<td>"+ rs.getString("start_date") +"</td>";    
-		    	message     += "<td>"+ rs.getString("end_date") +"</td>";    
+		    	message     += "<td>"+ end +"</td>";    
 		    	message     += "<td>"+ hasPassword +"</td>";    
 		    	message     += "<td><a href='ModifyShorten.jsp?update="+ rs.getString("id") +"' >Update</a></td>";    
 		    	message     += "<td><a href='UpdateShorten?delete="+ rs.getString("id") +"' >Delete</a></td></tr>"; 
@@ -484,7 +488,6 @@ public class Logic {
     
     public String getModifyShorten(String urlID, Integer userID) throws Exception {
 
-        System.out.println(userID);
 	    String query = "SELECT * FROM url_data where author=" + userID +" AND id="+ urlID;
 	    Connection conn = null;
 	    ResultSet rs = null;
@@ -496,21 +499,25 @@ public class Logic {
 	        conn = getConnection();
 	        st = conn.createStatement();
 	        rs = st.executeQuery(query);
-	        
 	     
 	        
 	        if (rs.next()) {	
 	        	if(rs.getString("custom_short") != null) {
 	       			shorten += rs.getString("custom_short");
 	       		}
-	        	
+	        	   
+		        String end = "";
+	    		if(rs.getString("end_date") != null) {
+	    			end = rs.getString("end_date");
+	    		}
+	    		
 	    		form     += "<input type='hidden' name='update' value='"+ urlID +"' ></input>";       		
 	    		form     += "Long URL: <input type='text' name='longUrl' size='100' value='"+ rs.getString("long_url") +"' ></input><br>";  
 	    		form     += "Custom short URL: <input type='text' name='customShort' maxlength='20' size='100' value='"+ shorten +"' ></input><br>";   
 		    	form     += "Password: <input type='password' name='password' size='100' value='"+ rs.getString("password") +"'></input></br>";      	  	
 	    		form     += "Max view: <input type='number' name='maxView' size='100' value='"+ rs.getString("max_views") +"' ></input><br>";   
 	    		form     += "Date start (format yyyy-mm-dd): <input type='text' maxlength='10' name='dateStart' size='100' value='"+ rs.getString("start_date") +"' ></input><br>";   
-	    		form     += "Date end (format yyyy-mm-dd): <input type='text' maxlength='10' name='dateEnd' size='100' value='"+ rs.getString("end_date") +"' ></input><br>";   
+	    		form     += "Date end (format yyyy-mm-dd): <input type='text' maxlength='10' name='dateEnd' size='100' value='"+ end +"' ></input><br>";   
 	        }
 	    } finally {
 	    }
